@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>图片裁剪工具</title>
+    <!-- <title>Smart Resize - 最智能的在线批量图片裁剪工具</title> -->
+    <meta name="keywords" content="批量裁剪图片, 批量改变图片大小, 在线裁剪, 在线调整图片大小, 在线缩放, 智能裁剪, HTML5, 免费">
+    <meta name="description" content="Smart Resize 能智能检测每张图片的主次部分并在线批量裁剪图片，同时您也可以对单张图片进行裁剪，本工具完全免费">
+    <link rel="stylesheet" href="./css/global.css">
+</head>
+
+<body>
+    <header>
+        <!-- <img src="./css/logo.png" alt="Smart Resize logo" id="logo"> -->
+    </header>
+    <main>
+        <!-- <h1>
+            也许是世界上最快且最智能的在线批量裁剪图片工具 </h1> -->
+        <div id="resizer" class="shadow">
+            <div id="loader" class="none">
+                <svg class="progress" width="120" height="120" viewBox="0 0 120 120">
+          <circle class="progress__meter" cx="60" cy="60" r="54" stroke-width="8" />
+          <circle class="progress__value" cx="60" cy="60" r="54" stroke-width="8" />
+        </svg>
+                <span id="process">0%</span>
+                <span id="waiting"></span>
+            </div>
+            <div id="upload">
+                <div id="upload_bg">
+                    <ul>
+                        <li>支持的扩展名: jpg, png, gif, bmp</li>
+                        <li>无文件大小限制</li>
+                        <li>无图片尺寸限制</li>
+                        <li>极速的图片智能裁剪</li>
+                        <li>裁剪后的图片通过zip文件下载</li>
+                    </ul>
+                </div>
+                <div id="btn_outer">
+                    <span id="upload_btn" class="orange_btn" role="button">
+            <span class="upload_txt">上传图片</span>
+                    <input type="file" id="multi" multiple="multiple" accept=".png, .jpg, .jpeg, .gif, .bmp" class="multi_up">
+                    </span>
+                    <span id="demo_btn" class="white_btn" role="button">
+            <span class="upload_txt">剪裁单张图片</span>
+                    <input type="file" id="single_file" accept=".png, .jpg, .jpeg, .gif, .bmp">
+                    </span>
+                </div>
+            </div>
+            <div id="cover" class="none">
+                <div id="cover_inner" class="none">
+                    <span id="result"></span>
+                    <div role="button" class="orange_btn btn" id="download_zip">点此下载裁剪后的文件</div>
+                    <a role="button" class="white_btn btn" onclick="location.reload()">重新上传图片</a>
+                </div>
+            </div>
+            <form id="opt">
+                <ul id="tab" class="zh-cn">
+                    <li class="cur_tab">固定尺寸</li>
+                    <li>比例</li>
+                    <li>缩放</li>
+                    <li>最大宽度</li>
+                    <li>最大长度</li>
+                    <li>缩略图</li>
+                </ul>
+                <div>
+                    <div id="wrapper">
+                        <div class="info_wrapper">
+                            <span class="title">目标尺寸大小:</span>
+                            <input type="number" step="1" placeholder="宽度" id="w1" value="">
+                            <span class="times">&times;</span>
+                            <input type="number" step="1" placeholder="长度" id="h1" value="">
+                        </div>
+                        <div class="info_wrapper none">
+                            <span class="title">图片固定长宽比例（例如，4:3）: </span>
+                            <input type="number" placeholder="宽度" id="ratio_width">
+                            <span class="times">:</span>
+                            <input type="number" placeholder="长度" id="ratio_height">
+                        </div>
+                        <div class="info_wrapper none">
+                            <span class="title">图片缩放比例:</span>
+                            <input type="number" id="scale">
+                        </div>
+                        <div class="info_wrapper none">
+                            <span class="title">图片最大宽度 :</span>
+                            <input type="number" placeholder="宽度" id="max_width">
+                        </div>
+                        <div class="info_wrapper none">
+                            <span class="title">图片最大高度 :</span>
+                            <input type="number" placeholder="长度" id="max_height">
+                        </div>
+                        <div class="info_wrapper none">
+                            <span class="title">图片最大宽度及高度:</span>
+                            <input type="number" placeholder="宽度" id="thumb_width">
+                            <span class="times">&times;</span>
+                            <input type="number" placeholder="长度" id="thumb_height">
+                        </div>
+                    </div>
+                    <div class="info_wrapper">
+                        <span class="title">批量裁剪后的图片后缀名（比如：-thumb）: </span>
+                        <input type="text" id="suffix">
+                    </div>
+                    <div class="info_wrapper" id="method">
+                        <span class="title">图片裁剪方式:</span>
+                        <div class="radio_container" id="crop_method">
+                            <div class="radio" id="scrop">
+                                <input type="radio" value="0" id="crop_method1" name="crop_method" checked />
+                                <label for="crop_method1"><span></span>智能裁剪（智能识别图片主次部分）</label>
+                            </div>
+                            <div class="radio" id="center">
+                                <input type="radio" value="1" id="crop_method2" name="crop_method" />
+                                <label for="crop_method2"><span></span>从中心裁剪</label>
+                            </div>
+                            <span class="clear"></span>
+                        </div>
+                    </div>
+                    <div class="info_wrapper" id="human_face">
+                        <div class="checkbox">
+                            <input type="checkbox" id="face_detect" name="face_detect" />
+                            <label for="face_detect"><span><span>&#10004;</span></span>
+                <div>检测人脸关键点</div>
+              </label>
+                            <span id="face_info">（系统会将人脸加入主体识别算法中，过程较慢）</span>
+                        </div>
+                    </div>
+                    <div class="info_wrapper" id="fmt">
+                        <span class="title">输出图片格式:</span>
+                        <div class="radio_container">
+                            <div class="radio">
+                                <input type="radio" value="0" id="output_format1" name="output_format" />
+                                <label for="output_format1"><span></span>jpg</label>
+                            </div>
+                            <div class="radio">
+                                <input type="radio" value="1" id="output_format2" name="output_format" checked />
+                                <label for="output_format2"><span></span>png</label>
+                            </div>
+                            <div class="radio">
+                                <input type="radio" value="2" id="output_format5" name="output_format" />
+                                <label for="output_format5"><span></span>webp( 仅适用于chrome )</label>
+                            </div>
+                            <span class="clear"></span>
+                        </div>
+                    </div>
+                    <div class="info_wrapper">
+                        <span class="title">输出图像质量:</span>
+                        <span id="quality">100%</span>
+                        <input type="range" max="100" min="1" value="100" id="q_value">
+                    </div>
+                    <div id="resize_btn" class="white_btn not_allowed" onclick="resize_loop()">开始裁剪图片</div>
+                </div>
+            </form>
+            <div id="single" align="center">
+                <div id="cropper">
+                    <img src="" id="single_img">
+                </div>
+                <form id="cropper_opt">
+                    <div class="fixed_ratio">
+                        <div class="checkbox">
+                            <input type="checkbox" id="fixed_ratio" name="fixed_ratio" />
+                            <label for="fixed_ratio"><span><span>&#10004;</span></span>
+                <div>固定比例: </div>
+              </label>
+                        </div>
+                        <input type="number" step="1" placeholder="宽度" id="rw" value="" disabled>
+                        <span class="times">:</span>
+                        <input type="number" step="1" placeholder="长度" id="rh" value="" disabled>
+                    </div>
+                    <div class="cropper_range">
+                        <span class="title">输出图像质量:</span>
+                        <span id="cropper_quality">100%</span>
+                        <input type="range" max="100" min="1" value="100" id="cropper_value">
+                    </div>
+                </form>
+                <div id="single_btn_container">
+                    <div role="button" class="orange_btn btn" id="download_cropper">点此下载裁剪后图片</div>
+                    <a role="button" class="white_btn btn" onclick="location.reload()">重新上传图片</a>
+                </div>
+            </div>
+            <span class="clear"></span>
+        </div>
+    </main>
+    <footer>
+        <img id="img" class="none">
+        <canvas id="canvas" class="none"></canvas>
+        <script src="smart.js"></script>
+    </footer>
+</body>
+
+</html>
